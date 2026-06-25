@@ -22,4 +22,4 @@ on:
           with:
             context: .
             push: true
-            tags: ${{secrets.DOCKERHUB_USERNAME}}/Worker_Project:latest
+            tags: ${{secrets.DOCKERHUB_USERNAME}}/workers-management:latest
