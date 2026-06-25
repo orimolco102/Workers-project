@@ -1,0 +1,29 @@
+@baseUrl = http://192.168.10.212:3000
+
+GET {{baseUrl}}/
+
+###
+GET {{baseUrl}}/api/allworkers
+
+###
+GET {{baseUrl}}/api/allworkers/id/6a33fef7c53cb9a241a6255b
+
+###
+GET {{baseUrl}}/api/allworkers/name/Dana Mizrahi
+
+###
+
+POST {{baseUrl}}/api/allworkers/createworker
+Content-Type: application/json
+
+{
+    "name": "newtest fwefer",
+    "email": "newtes234@ematest.com",
+    "phone": "0645882467",
+    "role": "peasent",
+    "department": "HR"
+}
+
+###
+
+DELETE {{baseUrl}}/api/allworkers/deleteworker/6a33d178ec2df4c4eb04244d

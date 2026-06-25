@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workers Info app</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/api.js" defer></script>
+</head>
+<body>
+
+    <div class="dashboard">
+        <header class="dash-header">
+            <h1>Worker Management Site</h1>
+        </header>
+        
+        <div class="table-wrapper">
+            <table class="workers-table">
+                <thead>
+                    <tr>
+                        <th class="main-CB">
+                            <input type="checkbox" id="CB-all">
+                        </th>
+                        <th>Worker</th>
+                        <!-- <th>Email</th> -->
+                        <th>Department</th>
+                        <th>Role</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="workersGrid">
+
+                </tbody>
+
+            </table>
+        </div>
+
+        <button class="btn-prim" id="showFormBtn">Add new Worker +</button>
+
+        <div id="form-container" class="hidden">
+            <div class="form-content">
+                <h2>Add New Worker</h2>
+                <form id="newworkerform">
+                    <input type="text" id="name" placeholder="Name" required>
+                    <input type="email" id="email" placeholder="Email address" required>
+                    <input type="number" id="phone number" placeholder="Phone number" required>
+                    <input type="text" id="department" placeholder="Department" required>
+                    <input type="text" id="worker role" placeholder="Role" required>
+                    <div class="btn-cont">
+                        <button type="button" class="btn-sec" id="closeformbtn">Cancel</button>
+                        <button type="submit" class="btn-prim2">Submit</button>  
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
