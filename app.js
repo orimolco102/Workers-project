@@ -56,7 +56,7 @@ app.get("/health", (req, res) => {
   res.status(dbConnected ? 200 : 503).json({
     status: dbConnected ? "ok" : "Error",
     db: dbState[mongoose.connection.readyState],
-    runtime: `${math.floor(process.uptime())}s`,
+    runtime: `${Math.floor(process.uptime())}s`,
     enviornment: process.env.NODE_ENV || "development",
   });
 });
