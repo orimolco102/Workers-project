@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.10.212:8080/api/allworkers";
+const API_URL = "http://localhost:3000/api/allworkers";
 const workergrid = document.getElementById("workersGrid");
 
 async function loadworkers() {
