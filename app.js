@@ -50,7 +50,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/health", (req, res) => {
-  const dbState = ["connected", "discon", "connecting", "disconnecting"];
+  const dbState = ["discon", "connected", "connecting", "disconnecting"];
   const dbConnected = mongoose.connection.readyState === 1;
 
   res.status(dbConnected ? 200 : 503).json({
