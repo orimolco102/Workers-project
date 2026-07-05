@@ -7,7 +7,7 @@ async function loadworkers() {
     console.log(workers);
     renderWorkers(workers);
   } catch (error) {
-    console.log("error");
+    console.error(error);
   }
 }
 
