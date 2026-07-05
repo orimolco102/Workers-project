@@ -23,7 +23,7 @@ services:
       test:
         [
           "CMD",
-          "mongo",
+          "mongosh",
           "curl",
           "-f",
           "https://workers-project.onrender.com/health",
