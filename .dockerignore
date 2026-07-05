@@ -2,7 +2,9 @@ node_modules
 
 .gitignore
 .env
-.dockerignore
+.env.production
 .git
+*.md
+.vscode
 
 requests.http

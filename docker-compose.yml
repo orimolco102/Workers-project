@@ -1,5 +1,6 @@
 services:
   app:
+    image: main_app
     build: .
     ports:
       - 443:3000
@@ -9,9 +10,16 @@ services:
       MONGO_URL: ${MONGO_URL}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    # A widely used pattern for HTTP services
+    healthcheck:
+      test: ["CMD", "curl", "-f", "https://workers-project.onrender.com/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
     depends_on:
       - mongodb
-
   mongodb:
     image: mongo:7
     ports:
