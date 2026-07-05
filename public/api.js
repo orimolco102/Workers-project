@@ -1,8 +1,9 @@
 const workergrid = document.getElementById("workersGrid");
+const API = '/api/allworkers'
 
 async function loadworkers() {
   try {
-    const response = await fetch(process.env.API_URL);
+    const response = await fetch(API);
     const workers = await response.json();
     console.log(workers);
     renderWorkers(workers);
@@ -47,7 +48,7 @@ function renderWorkers(worker) {
 
 async function deleteWorker(id) {
   try {
-    const response = await fetch(`${process.env.API_URL}/deleteworker/${id}`, {
+    const response = await fetch(`${API}/deleteworker/${id}`, {
       method: "DELETE",
     });
 
@@ -108,7 +109,7 @@ async function formsubmit(event) {
   };
 
   try {
-    const response = await fetch(`${process.env.API_URL}/createworker`, {
+    const response = await fetch(`${API}/createworker`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
