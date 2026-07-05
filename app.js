@@ -19,6 +19,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:8080",
   "https://workers-project.onrender.com",
+  "http://orimo.co.il:3000",
   process.env.RENDER_EXTERNAL_URL,
 ].filter(Boolean);
 
