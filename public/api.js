@@ -1,3 +1,4 @@
+require("dotenv").config();
 const workergrid = document.getElementById("workersGrid");
 
 async function loadworkers() {
