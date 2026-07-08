@@ -9,6 +9,5 @@ docker-compose.override.yml
 docker-compose.prod.yml
 *.md
 Dockerfile
-package-lock.json
 
 requests.http
