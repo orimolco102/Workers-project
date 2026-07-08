@@ -1,289 +1,222 @@
-<div align="center">
+# 👷 Workers-Project
 
-# 👷 Workers Project
+A **Node.js/Express** REST API for managing "Workers" data, backed by **MongoDB**, fully containerized with Docker. It ships with separate **development** and **production** setups, plus a handy Windows helper script so you never have to memorize Docker commands.
 
-### A Production-Ready RESTful API for Workforce Management
-
-[![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-7.x-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
-[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/features/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-
-<br/>
-
-> A scalable, containerized backend service built with Node.js, Express, and MongoDB — fully automated with GitHub Actions CI/CD pipelines and deployed via Docker.
-
-<br/>
-
-[📖 API Docs](#-api-endpoints) · [🚀 Quick Start](#-quick-start) · [🐳 Docker Setup](#-docker-setup) · [⚙️ CI/CD Pipeline](#%EF%B8%8F-cicd-pipeline)
-
-</div>
+`Node.js 20` · `Express` · `MongoDB 7` · `Docker Compose` · `JWT Auth`
 
 ---
 
-## 📌 Table of Contents
+## 📚 Table of Contents
 
-- [About the Project](#-about-the-project)
+- [Quick Start](#-quick-start)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
-- [Quick Start](#-quick-start)
-- [Docker Setup](#-docker-setup)
+- [How It Works](#-how-it-works)
 - [Environment Variables](#-environment-variables)
-- [API Endpoints](#-api-endpoints)
-- [CI/CD Pipeline](#%EF%B8%8F-cicd-pipeline)
-- [Contributing](#-contributing)
-
----
-
-## 🧠 About the Project
-
-The **Workers Project** is a full-featured RESTful API designed to manage workforce data efficiently. It follows the **MVC (Model-View-Controller)** architectural pattern, ensuring separation of concerns, scalability, and ease of maintenance.
-
-Key highlights:
-- 🔧 **Clean Architecture** — MVC pattern with dedicated layers for routing, controllers, and models
-- 🐳 **Fully Containerized** — Docker & Docker Compose for consistent environments across dev and production
-- 🔄 **Automated CI/CD** — GitHub Actions workflow handles linting, testing, and Docker image publishing on every push
-- 🌱 **Database Seeding** — Includes a `load-workers.js` script to quickly seed your MongoDB instance
-- 🌐 **Frontend Ready** — Ships with a static `public/` layer (`index.html`, `api.js`, `style.css`) for immediate UI interaction
-
----
-
-## 🛠 Tech Stack
-
-| Layer | Technology |
-|---|---|
-| **Runtime** | Node.js |
-| **Framework** | Express.js |
-| **Database** | MongoDB (via Mongoose) |
-| **Containerization** | Docker & Docker Compose |
-| **CI/CD** | GitHub Actions |
-| **Config Management** | dotenv |
-| **API Testing** | REST Client (`requests.http`) |
-
----
-
-## 📁 Project Structure
-
-```
-workers-project/
-│
-├── .github/
-│   └── workflows/
-│       └── docker.yml          # GitHub Actions CI/CD pipeline
-│
-├── config/
-│   └── db.js                   # MongoDB connection setup
-│
-├── controllers/
-│   └── worker.controller.js    # Business logic for worker operations
-│
-├── model/
-│   └── Workers.js              # Mongoose schema & model
-│
-├── public/
-│   ├── api.js                  # Frontend API calls
-│   ├── index.html              # Main UI entry point
-│   └── style.css               # Styling
-│
-├── route/
-│   └── workersRoute.js         # Express route definitions
-│
-├── .dockerignore
-├── .env                        # Environment variables (not committed)
-├── .gitignore
-├── app.js                      # Express app initialization
-├── docker-compose.yml          # Multi-container orchestration
-├── Dockerfile                  # Container image definition
-├── load-workers.js             # Database seeder script
-├── package.json
-└── requests.http               # API test requests
-```
+- [Running the Project](#-running-the-project)
+- [Accessing the App](#-accessing-the-app)
+- [Testing the API](#-testing-the-api)
+- [Good to Know](#-good-to-know)
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
+New here? This is the fastest path to a running app.
 
-Make sure you have the following installed:
+1. **Clone it**
+   ```bash
+   git clone <your-repo-url>
+   cd Workers-Project
+   ```
+2. **Add your secrets** — fill in `.env` (see [Environment Variables](#-environment-variables))
+3. **Run it**
+   - 🪟 Windows: double-click `ComposeFile.bat` → choose option **1**
+   - 🐧 Mac/Linux: `docker compose up`
+4. **Open it** → [http://localhost:3000](http://localhost:3000) 🎉
 
-- [Node.js](https://nodejs.org/) `v18+`
-- [npm](https://www.npmjs.com/) `v9+`
-- [MongoDB](https://www.mongodb.com/) (local or Atlas URI)
-
-### Installation
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/your-username/workers-project.git
-cd workers-project
-
-# 2. Install dependencies
-npm install
-
-# 3. Set up environment variables
-cp .env.example .env
-# Edit .env with your MongoDB URI and port
-
-# 4. (Optional) Seed the database
-node load-workers.js
-
-# 5. Start the development server
-npm start
-```
-
-The server will be running at `http://(OriMo.co.il):8080`
+That's it — Docker builds the app, spins up MongoDB, and connects the two automatically.
 
 ---
 
-## 🐳 Docker Setup
+## 🧰 Tech Stack
 
-Run the entire application stack (API + MongoDB) with a single command using Docker Compose.
+| | |
+|---|---|
+| **Runtime** | Node.js 20 (Alpine) |
+| **Framework** | Express |
+| **Database** | MongoDB 7 (via Mongoose) |
+| **Auth** | JWT (`JWT_SECRET`) |
+| **Containers** | Docker + Docker Compose (multi-stage build for dev/prod) |
 
-```bash
-# Build and start all services
-docker-compose up --build
+---
 
-# Run in detached mode (background)
-docker-compose up -d --build
-
-# Stop all services
-docker-compose down
-
-# Stop and remove volumes (clears database)
-docker-compose down -v
-```
-
-### Docker Architecture
+## 🗂️ Project Structure
 
 ```
-┌─────────────────────────────────┐
-│         Docker Network          │
-│                                 │
-│  ┌──────────────┐               │
-│  │  Node.js API │ :3000         │
-│  │  (Express)   │◄──────────── ─┼── HTTP Requests
-│  └──────┬───────┘               │
-│         │                       │
-│  ┌──────▼───────┐               │
-│  │   MongoDB    │ :27017        │
-│  │  Container   │               │
-│  └──────────────┘               │
-└─────────────────────────────────┘
+Workers-Project/
+├── .github/
+│   └── workflows/
+│       └── docker.yml          # CI/CD workflow
+├── config/
+│   └── db.js                   # MongoDB connection (Mongoose)
+├── controllers/
+│   └── worker.controller.js    # Request handlers / business logic for Workers
+├── model/
+│   └── Workers.js               # Mongoose schema/model for a Worker
+├── node_modules/                # Installed npm dependencies (not committed)
+├── public/
+│   ├── api.js                   # Front-end script for calling the API
+│   ├── index.html                # Static front-end page (served at "/")
+│   └── style.css                 # Front-end styling
+├── route/
+│   └── workersRoute.js          # Express routes, mounted at /api/allworkers
+├── .dockerignore                 # Files/folders excluded from the Docker build context
+├── .env                           # Environment variables for development
+├── .env.production                # Environment variables for production
+├── .gitignore                     # Files/folders excluded from git
+├── app.js                          # Application entry point
+├── ComposeFile.bat                 # Interactive helper script to run Docker Compose commands
+├── docker-compose.yml               # Base Docker Compose configuration
+├── docker-compose.override.yml      # Overrides automatically applied in development
+├── docker-compose.prod.yml           # Additional configuration for production
+├── Dockerfile                         # Multi-stage build: development & production
+├── load-workers.js                     # Script to seed/load worker data
+├── package.json / package-lock.json     # Node.js dependencies and scripts
+├── readme.md                             # This file
+└── requests.http                          # Sample HTTP requests for testing the API
 ```
 
 ---
 
-## 🔐 Environment Variables
+## ⚙️ How It Works
 
-Create a `.env` file in the root directory. Reference the table below:
+- **`app.js`** boots the Express app, connects to MongoDB via **`config/db.js`**, and mounts the Workers API at **`/api/allworkers`**.
+- **`model/Workers.js`** defines the Mongoose schema for a Worker.
+- **`controllers/worker.controller.js`** handles the actual logic — create, read, update, delete.
+- **`route/workersRoute.js`** wires HTTP routes to those controller functions.
+- **`public/`** is a small static front end (`index.html`, `style.css`, `api.js`) served directly by Express.
+- **`load-workers.js`** seeds the database with sample worker data, if you want some to play with.
+- **`requests.http`** has ready-made requests for testing the API (works great with the VS Code REST Client extension).
 
-| Variable | Description | Example |
+### 🔌 Endpoints
+
+| Endpoint | What it does |
+|---|---|
+| `GET /` | Serves the front end |
+| `GET /health` | Health check — app status, DB connection, uptime, environment |
+| `/api/allworkers/*` | The Workers API (see `route/workersRoute.js` or `requests.http`) |
+
+> The app also checks incoming requests against a CORS allow-list and **won't start at all** if `JWT_SECRET` isn't set — so don't skip the env setup below!
+
+### 🐳 The Docker Setup, Simplified
+
+Three Compose files work together depending on how you run things:
+
+| File | When it's used | What it adds |
 |---|---|---|
-| `PORT` | Port the server listens on | `3000` |
-| `MONGO_URI` | MongoDB connection string | `mongodb://mongo:27017/workersdb` |
-| `NODE_ENV` | App environment | `development` / `production` |
+| `docker-compose.yml` | Always | Base setup — the `app` and `mongodb` services |
+| `docker-compose.override.yml` | Automatically, in dev | Hot reload, dev ports (`3000`, `27017`) |
+| `docker-compose.prod.yml` | Only when you ask for it | Production build, port `443`, auto-restart |
 
-> ⚠️ Never commit your `.env` file. It is included in `.gitignore`.
+**In development**, your code folder is mounted straight into the container, so when you save a file, the app reloads instantly — no rebuilding needed.
 
----
-
-## 📡 API Endpoints
-
-Base URL: `http://localhost:3000/api`
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/` | Retrieve all workers |
-| `GET` | `/id/:id` | Get a single worker by ID |
-| `POST` | `/createworker` | Create a new worker |
-| `DELETE` | `/deleteworker/:id` | Delete a worker |
-| `PUT` | `/workers/:id` | Update an existing worker |
-
-### Example Request
-
-```http
-POST {{baseUrl}}/api/allworkers/createworker
-Content-Type: application/json
-Host: (OriMo):8080
-```
-
-### Example Response
-
-```json
-[
-  {
-    "_id": "64f2a3b12c8e4d001f3a9b21",
-    "name": "Jane Doe",
-    "role": "Engineer",
-    "department": "R&D",
-    "phone": 0XXXXXXXXX,
-    "createdAt": "2024-01-15T10:30:00.000Z"
-  }
-]
-```
-
-> 💡 Use the included `requests.http` file with the [REST Client VS Code extension](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) for quick endpoint testing.
+**In production**, the code is baked into the image at build time (no live mounting), the app listens on port `443`, and both the app and database will auto-restart if they crash or the machine reboots.
 
 ---
 
-## ⚙️ CI/CD Pipeline
+## 🔑 Environment Variables
 
-This project uses **GitHub Actions** to automate the build and deployment pipeline on every push to `main`.
+You'll need two files: `.env` for development and `.env.production` for production. Both use the same variables:
 
-### Workflow: `.github/workflows/docker.yml`
+| Variable | What it's for |
+|---|---|
+| `PORT` | Port the app listens on inside the container (defaults to `3000`) |
+| `DB_NAME` | MongoDB database name |
+| `MONGO_URL` | MongoDB connection string, e.g. `mongodb://<user>:<password>@mongodb:27017/<db_name>?authSource=admin` |
+| `DB_USER` | MongoDB root username |
+| `DB_PASSWORD` | MongoDB root password |
+| `JWT_SECRET` | Secret for signing JWTs — **required**, or the app won't start |
 
-```
-Push to main
-     │
-     ▼
-┌─────────────┐
-│  Checkout   │
-│    Code     │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│  Build      │
-│  Docker     │
-│   Image     │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│   Push to   │
-│  Docker Hub │
-│ / GHCR      │
-└─────────────┘
-```
-
-The pipeline automatically:
-- ✅ Builds the Docker image on every commit
-- ✅ Runs health checks to validate the container
-- ✅ Publishes the image to the container registry
+> 🔒 Keep real secrets out of git — `.env` and `.env.production` should stay in `.gitignore`.
 
 ---
 
-## 🤝 Contributing
+## ▶️ Running the Project
 
-Contributions are welcome! Here's how to get started:
+### Option A — `ComposeFile.bat` (Windows, recommended)
 
+Just double-click `ComposeFile.bat` and pick a number:
+
+```
+1. Compose up development environment
+2. Compose up production environment
+3. Compose down production environment
+4. Compose down development environment
+5. See which images are running and their size
+```
+
+| Pick | It runs |
+|---|---|
+| **1** | `docker compose up` |
+| **2** | `docker compose --env-file .env.production -f docker-compose.yml -f docker-compose.prod.yml up` |
+| **3** | `docker compose --env-file .env.production -f docker-compose.yml -f docker-compose.prod.yml down` |
+| **4** | `docker compose down` |
+| **5** | `docker ps` |
+
+### Option B — Manual commands (Mac/Linux/anywhere)
+
+**Start developing:**
 ```bash
-# Fork the repository, then:
-git checkout -b feature/your-feature-name
-git commit -m "feat: add your feature"
-git push origin feature/your-feature-name
-# Open a Pull Request
+docker compose up
+```
+**Stop:**
+```bash
+docker compose down
 ```
 
-Please follow [Conventional Commits](https://www.conventionalcommits.org/) for commit messages.
+**Go to production:**
+```bash
+docker compose --env-file .env.production -f docker-compose.yml -f docker-compose.prod.yml up
+```
+**Stop production:**
+```bash
+docker compose --env-file .env.production -f docker-compose.yml -f docker-compose.prod.yml down
+```
+
+**Peek at what's running:**
+```bash
+docker ps
+```
 
 ---
 
-<div align="center">
+## 🌐 Accessing the App
 
-⭐ **If you found this project helpful, please give it a star!** ⭐
+| Environment | URL |
+|---|---|
+| Development | [http://localhost:3000](http://localhost:3000) |
+| Dev health check | [http://localhost:3000/health](http://localhost:3000/health) |
+| Production | `https://<your-host>` (host port `443` → container port `3000`) |
+| MongoDB (dev only) | `localhost:27017` |
 
-</div>
+In production, MongoDB isn't exposed to the outside world at all — only the `app` container can reach it, over Docker's internal network.
+
+---
+
+## 🧪 Testing the API
+
+- Open `requests.http` in an HTTP client (like the VS Code REST Client extension) and fire off pre-built requests.
+- Or just visit [http://localhost:3000](http://localhost:3000) and use the front end.
+
+---
+
+## 💡 Good to Know
+
+- Docker Desktop needs to be running before you use any command above.
+- In dev, code changes hot-reload automatically — no rebuild needed for everyday edits.
+- No `JWT_SECRET`? The app exits immediately. Set it first.
+- The `app` container waits for MongoDB to be healthy before starting — no race conditions.
+- MongoDB data lives in a Docker volume (`mongodata`) and survives `docker compose down`. Want a clean slate? Use `docker compose down -v`.
+- Changed a `.env` file? Restart the containers to pick it up.
+- You never need to run `npm install` locally — dependencies are installed inside the image automatically.

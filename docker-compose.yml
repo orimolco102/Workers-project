@@ -1,9 +1,9 @@
 services:
   app:
-    image: main_app
+    image: workers_proj
     build: .
-    ports:
-      - 443:3000
+    # ports:
+    #   - 443:3000
 
     environment:
       DB_NAME: ${DB_NAME}
@@ -20,14 +20,8 @@ services:
     image: mongo:7
     # A widely used pattern for HTTP services
     healthcheck:
-      test:
-        [
-          "CMD",
-          "mongosh",
-          "curl",
-          "-f",
-          "https://workers-project.onrender.com/health",
-        ]
+    # --eval tells mongosh to run a JavaScript snippet directly and exit, instead of opening an interactive shell session.
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 30s
       timeout: 10s
       retries: 3

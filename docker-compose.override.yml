@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      target: development
+    image: workers_proj:dev
+    ports:
+      - 3000:3000
+    volumes:
+      #creates the hot reload option. run the updates on my pc insted of doing the docker compose up command.
+      - .:/app 
+      - /app/node_modules
+
+  mongodb:
+    ports:
+      - 27017:27017

@@ -4,8 +4,12 @@
   "description": "Node Server",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
-    "loadWorkers": "node load-workers.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "loadWorkers": "node load-workers.js",
+
+    "dev-build": "docker compose up --build",
+    "prod": "docker compose --env-file .env.production -f docker-compose.yml -f docker-compose.prod.yml up"
   },
   "keywords": [],
   "author": "Ori Molco",
@@ -15,7 +19,9 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.7.0",
+    "mongoose": "^9.7.0"
+  },
+  "devDependencies": {
     "nodemon": "^3.1.14"
   }
 }

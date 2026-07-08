@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      context: .
+      target: production
+    image: workers_proj:prod
+    ports:
+      - 443:3000
+    restart: always
+
+
+  mongodb:
+    restart: always
