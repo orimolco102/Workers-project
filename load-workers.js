@@ -1,3 +1,5 @@
+const dns = require("dns");
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 require("dotenv").config();
 const mongoose = require("mongoose");
 const Worker = require("./model/Workers");
@@ -64,7 +66,8 @@ const workers = [
 
 async function loadeWorkers() {
   try {
-    await mongoose.connect(`${process.env.MONGO_URL}/${process.env.DB_NAME}`);
+    console.log(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/${process.env.DB_NAME}`);
+    await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/${process.env.DB_NAME}`);
     
     await Worker.deleteMany({});
     console.log("Users deleted");

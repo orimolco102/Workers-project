@@ -6,10 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "loadWorkers": "node load-workers.js",
-
-    "dev-build": "docker compose up --build",
-    "prod": "docker compose --env-file .env.production -f docker-compose.yml -f docker-compose.prod.yml up"
+    "loadWorkers": "node load-workers.js"
   },
   "keywords": [],
   "author": "Ori Molco",
@@ -19,6 +16,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "mongodb": "^7.5.0",
     "mongoose": "^9.7.0"
   },
   "devDependencies": {

@@ -8,6 +8,8 @@ const { log } = require("console");
 const { default: mongoose, STATES } = require("mongoose");
 const app = express();
 const PORT = process.env.PORT || 3000;
+const dns = require("dns");
+dns.setServers(["1.1.1.1", "8.8.8.8"]); 
 
 app.use(express.json());
 
@@ -39,7 +41,7 @@ app.use(
 // app.use('/css', express.static(path.join(__dirname, './public/style.css')));
 app.use(express.static(path.join(__dirname, "/public")));
 
-connectDB();
+connectDB(mongoose);
 
 if (!process.env.JWT_SECRET) {
   console.error("JWT_SECRET is not defined");
