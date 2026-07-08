@@ -8,7 +8,8 @@ async function connectDB(mongoose) {
 
     } catch (error) {
         console.error("DB connection failed");
-        console.error(error);      
+        console.error(error);
+        
     }
 }
 
