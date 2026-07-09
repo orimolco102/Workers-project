@@ -1,152 +1,152 @@
 # 👷 Workers-Project
 
-A **Node.js/Express** REST API for managing "Workers" data, backed by **MongoDB**, fully containerized with Docker. It ships with separate **development** and **production** setups, plus a handy Windows helper script so you never have to memorize Docker commands.
+REST API ב-**Node.js/Express** לניהול נתוני "Workers", מגובה על ידי **MongoDB Atlas**, ארוז לגמרי ב-Docker ועם **Nginx** כ-Reverse Proxy בחזית. הפרויקט כולל סביבות נפרדות ל-**פיתוח** ול-**פרודקשן**, וגם סקריפט עזר לווינדוס כדי שלא תצטרכו לשנן פקודות Docker.
 
-`Node.js 20` · `Express` · `MongoDB 7` · `Docker Compose` · `JWT Auth`
-
----
-
-## 📚 Table of Contents
-
-- [Quick Start](#-quick-start)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [How It Works](#-how-it-works)
-- [Environment Variables](#-environment-variables)
-- [Running the Project](#-running-the-project)
-- [Accessing the App](#-accessing-the-app)
-- [Testing the API](#-testing-the-api)
-- [Good to Know](#-good-to-know)
+`Node.js 20` · `Express` · `MongoDB Atlas` · `Nginx` · `Docker Compose` · `JWT Auth`
 
 ---
 
-## 🚀 Quick Start
+## 📚 תוכן עניינים
 
-New here? This is the fastest path to a running app.
+- [התחלה מהירה](#-התחלה-מהירה)
+- [טכנולוגיות](#-טכנולוגיות)
+- [איך זה עובד](#-איך-זה-עובד)
+- [משתני סביבה](#-משתני-סביבה)
+- [הרצת הפרויקט](#-הרצת-הפרויקט)
+- [גישה לאפליקציה](#-גישה-לאפליקציה)
+- [בדיקת ה-API](#-בדיקת-ה-api)
+- [דברים שכדאי לדעת](#-דברים-שכדאי-לדעת)
 
-1. **Clone it**
+---
+
+## 🚀 התחלה מהירה
+
+חדשים כאן? זו הדרך המהירה ביותר להריץ את האפליקציה.
+
+1. **שכפול הפרויקט (Clone)**
    ```bash
    git clone <your-repo-url>
    cd Workers-Project
    ```
-2. **Add your secrets** — fill in `.env` (see [Environment Variables](#-environment-variables))
-3. **Run it**
-   - 🪟 Windows: double-click `ComposeFile.bat` → choose option **1**
+2. **הוספת הסודות שלכם** — מלאו את קובץ `.env` (ראו [משתני סביבה](#-משתני-סביבה)), כולל פרטי החיבור ל-MongoDB Atlas
+3. **הרצה**
+   - 🪟 Windows: לחיצה כפולה על `ComposeFile.bat` ← בחירה באפשרות **1**
    - 🐧 Mac/Linux: `docker compose up`
-4. **Open it** → [http://localhost:3000](http://localhost:3000) 🎉
+4. **פתיחה** ← [http://localhost:3000](http://localhost:3000) 🎉
 
-That's it — Docker builds the app, spins up MongoDB, and connects the two automatically.
+זהו — Docker בונה את האפליקציה ומחבר אותה אוטומטית ל-Cluster שלכם ב-MongoDB Atlas.
 
 ---
 
-## 🧰 Tech Stack
+## 🧰 טכנולוגיות
 
 | | |
 |---|---|
 | **Runtime** | Node.js 20 (Alpine) |
 | **Framework** | Express |
-| **Database** | MongoDB 7 (via Mongoose) |
-| **Auth** | JWT (`JWT_SECRET`) |
-| **Containers** | Docker + Docker Compose (multi-stage build for dev/prod) |
+| **מסד נתונים** | MongoDB Atlas (מבוסס ענן, דרך Mongoose) |
+| **Reverse Proxy** | Nginx |
+| **אימות** | JWT (`JWT_SECRET`) |
+| **קונטיינרים** | Docker + Docker Compose (בנייה מרובת-שלבים ל-dev/prod) |
 
 ---
 
-## 🗂️ Project Structure
+## ⚙️ איך זה עובד
 
-```
-Workers-Project/
-├── .github/
-│   └── workflows/
-│       └── docker.yml          # CI/CD workflow
-├── config/
-│   └── db.js                   # MongoDB connection (Mongoose)
-├── controllers/
-│   └── worker.controller.js    # Request handlers / business logic for Workers
-├── model/
-│   └── Workers.js               # Mongoose schema/model for a Worker
-├── node_modules/                # Installed npm dependencies (not committed)
-├── public/
-│   ├── api.js                   # Front-end script for calling the API
-│   ├── index.html                # Static front-end page (served at "/")
-│   └── style.css                 # Front-end styling
-├── route/
-│   └── workersRoute.js          # Express routes, mounted at /api/allworkers
-├── .dockerignore                 # Files/folders excluded from the Docker build context
-├── .env                           # Environment variables for development
-├── .env.production                # Environment variables for production
-├── .gitignore                     # Files/folders excluded from git
-├── app.js                          # Application entry point
-├── ComposeFile.bat                 # Interactive helper script to run Docker Compose commands
-├── docker-compose.yml               # Base Docker Compose configuration
-├── docker-compose.override.yml      # Overrides automatically applied in development
-├── docker-compose.prod.yml           # Additional configuration for production
-├── Dockerfile                         # Multi-stage build: development & production
-├── load-workers.js                     # Script to seed/load worker data
-├── package.json / package-lock.json     # Node.js dependencies and scripts
-├── readme.md                             # This file
-└── requests.http                          # Sample HTTP requests for testing the API
-```
+- **`app.js`** מעלה את אפליקציית ה-Express, מתחבר ל-MongoDB Atlas דרך **`config/db.js`**, ומחבר את ה-API של Workers בנתיב **`/api/allworkers`**.
+- **`model/Workers.js`** מגדיר את סכמת ה-Mongoose עבור Worker.
+- **`controllers/worker.controller.js`** מטפל בלוגיקה בפועל — יצירה, קריאה, עדכון ומחיקה.
+- **`route/workersRoute.js`** מחבר את נתיבי ה-HTTP לפונקציות הקונטרולר.
+- **`public/`** הוא פרונט-אנד סטטי קטן (`index.html`, `style.css`, `api.js`), מוגש ישירות דרך Express.
+- **`load-workers.js`** מזין את מסד הנתונים ב-Atlas בנתוני עובדים לדוגמה, אם תרצו כמה כאלה לשחק איתם.
+- **`requests.http`** מכיל בקשות מוכנות מראש לבדיקת ה-API (עובד מצוין עם תוסף VS Code REST Client).
 
----
+### 🔌 נתיבים (Endpoints)
 
-## ⚙️ How It Works
-
-- **`app.js`** boots the Express app, connects to MongoDB via **`config/db.js`**, and mounts the Workers API at **`/api/allworkers`**.
-- **`model/Workers.js`** defines the Mongoose schema for a Worker.
-- **`controllers/worker.controller.js`** handles the actual logic — create, read, update, delete.
-- **`route/workersRoute.js`** wires HTTP routes to those controller functions.
-- **`public/`** is a small static front end (`index.html`, `style.css`, `api.js`) served directly by Express.
-- **`load-workers.js`** seeds the database with sample worker data, if you want some to play with.
-- **`requests.http`** has ready-made requests for testing the API (works great with the VS Code REST Client extension).
-
-### 🔌 Endpoints
-
-| Endpoint | What it does |
+| נתיב | מה הוא עושה |
 |---|---|
-| `GET /` | Serves the front end |
-| `GET /health` | Health check — app status, DB connection, uptime, environment |
-| `/api/allworkers/*` | The Workers API (see `route/workersRoute.js` or `requests.http`) |
+| `GET /` | מגיש את הפרונט-אנד |
+| `GET /health` | בדיקת תקינות — סטטוס האפליקציה, חיבור למסד הנתונים, זמן ריצה, סביבה |
+| `/api/allworkers/*` | ה-API של Workers (ראו `route/workersRoute.js` או `requests.http`) |
 
-> The app also checks incoming requests against a CORS allow-list and **won't start at all** if `JWT_SECRET` isn't set — so don't skip the env setup below!
+> האפליקציה גם בודקת בקשות נכנסות מול רשימת CORS מורשית, **ולא תעלה בכלל** אם `JWT_SECRET` לא מוגדר — אז אל תדלגו על הגדרת משתני הסביבה למטה!
 
-### 🐳 The Docker Setup, Simplified
+### 🐳 מבנה ה-Docker, בפשטות
 
-Three Compose files work together depending on how you run things:
+שלושה קבצי Compose עובדים יחד, תלוי איך אתם מריצים את הפרויקט:
 
-| File | When it's used | What it adds |
+| קובץ | מתי הוא בשימוש | מה הוא מוסיף |
 |---|---|---|
-| `docker-compose.yml` | Always | Base setup — the `app` and `mongodb` services |
-| `docker-compose.override.yml` | Automatically, in dev | Hot reload, dev ports (`3000`, `27017`) |
-| `docker-compose.prod.yml` | Only when you ask for it | Production build, port `443`, auto-restart |
+| `docker-compose.yml` | תמיד | תצורת בסיס — סרוויס ה-`app` |
+| `docker-compose.override.yml` | אוטומטית, בפיתוח | Hot reload, פורט פיתוח (`3000`) |
+| `docker-compose.prod.yml` | רק כשמבקשים זאת במפורש | בנייה לפרודקשן, סרוויס ה-`nginx`, הפעלה מחדש אוטומטית |
 
-**In development**, your code folder is mounted straight into the container, so when you save a file, the app reloads instantly — no rebuilding needed.
+**בפיתוח**, תיקיית הקוד שלכם מחוברת (mount) ישירות לקונטיינר, כך שברגע ששומרים קובץ, האפליקציה נטענת מחדש מיד — בלי צורך בבנייה מחדש. הגישה לאפליקציה היא ישירה, דרך פורט `3000`.
 
-**In production**, the code is baked into the image at build time (no live mounting), the app listens on port `443`, and both the app and database will auto-restart if they crash or the machine reboots.
+**בפרודקשן**, הקוד "נאפה" לתוך האימג' בזמן הבנייה (בלי mount חי), האפליקציה נגישה **רק בתוך** הרשת של Docker (לא נחשף אף פורט למחשב המארח), ו-**Nginx** יושב בחזית כ-Reverse Proxy, מאזין על פורט `80` ומעביר את התעבורה הלאה לאפליקציה. גם האפליקציה וגם Nginx יעלו מחדש אוטומטית אם הם קורסים או שהמכונה מופעלת מחדש.
+
+מסד הנתונים כבר אינו קונטיינר מקומי באף אחת מהסביבות — גם הפיתוח וגם הפרודקשן מתחברים לאותו Cluster ב-**MongoDB Atlas**, כך שאין יותר סרוויס `mongodb` ב-Compose.
+
+### 🔀 Nginx כ-Reverse Proxy
+
+בפרודקשן, Nginx יושב לפני האפליקציה ומטפל בכל התעבורה הנכנסת לפני שהיא מגיעה ל-Node:
+
+```yaml
+nginx:
+  image: nginx:stable-alpine
+  restart: always
+  ports:
+    - "80:80"
+  volumes:
+    - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+  depends_on:
+    - app
+```
+
+קובץ `nginx/nginx.conf` מעביר (proxy) בקשות אל קונטיינר האפליקציה, לפי שם ה-service שלו ב-Compose:
+
+```nginx
+server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+        proxy_pass http://app:3000;
+    }
+
+    location /health {
+        proxy_pass http://app:3000/health;
+        access_log off;
+    }
+}
+```
+
+ההגדרה הזו נותנת לאפליקציה שכבת הגנה נוספת, ומניחה את התשתית לדברים כמו Load Balancing בין כמה קונטיינרים של האפליקציה בעתיד, אם יהיה עומס תעבורה.
 
 ---
 
-## 🔑 Environment Variables
+## 🔑 משתני סביבה
 
-You'll need two files: `.env` for development and `.env.production` for production. Both use the same variables:
+תצטרכו שני קבצים: `.env` לפיתוח ו-`.env.production` לפרודקשן. שניהם משתמשים באותם משתנים:
 
-| Variable | What it's for |
+| משתנה | למה הוא משמש |
 |---|---|
-| `PORT` | Port the app listens on inside the container (defaults to `3000`) |
-| `DB_NAME` | MongoDB database name |
-| `MONGO_URL` | MongoDB connection string, e.g. `mongodb://<user>:<password>@mongodb:27017/<db_name>?authSource=admin` |
-| `DB_USER` | MongoDB root username |
-| `DB_PASSWORD` | MongoDB root password |
-| `JWT_SECRET` | Secret for signing JWTs — **required**, or the app won't start |
+| `PORT` | הפורט שהאפליקציה מאזינה עליו בתוך הקונטיינר (ברירת מחדל `3000`) |
+| `DB_NAME` | שם מסד הנתונים ב-MongoDB Atlas |
+| `MONGO_URL` | מחרוזת חיבור מלאה ל-MongoDB Atlas, לדוגמה: `mongodb+srv://<user>:<password>@<cluster-url>/<db_name>?appName=<app-name>` |
+| `DB_USER` | שם משתמש ב-MongoDB Atlas |
+| `DB_PASSWORD` | סיסמה ב-MongoDB Atlas |
+| `JWT_SECRET` | סוד לחתימת JWT — **חובה**, אחרת האפליקציה לא תעלה |
 
-> 🔒 Keep real secrets out of git — `.env` and `.env.production` should stay in `.gitignore`.
+> 🔒 שמרו סודות אמיתיים מחוץ ל-git — `.env` ו-`.env.production` צריכים להישאר ב-`.gitignore`. זה חשוב במיוחד עכשיו, כשהפרטי ההתחברות מצביעים על מסד נתונים אמיתי בענן, ולא על קונטיינר מקומי חד-פעמי.
 
 ---
 
-## ▶️ Running the Project
+## ▶️ הרצת הפרויקט
 
-### Option A — `ComposeFile.bat` (Windows, recommended)
+### אפשרות א' — `ComposeFile.bat` (Windows, מומלץ)
 
-Just double-click `ComposeFile.bat` and pick a number:
+פשוט לחצו לחיצה כפולה על `ComposeFile.bat` ובחרו מספר:
 
 ```
 1. Compose up development environment
@@ -156,7 +156,7 @@ Just double-click `ComposeFile.bat` and pick a number:
 5. See which images are running and their size
 ```
 
-| Pick | It runs |
+| בחירה | מה זה מריץ |
 |---|---|
 | **1** | `docker compose up` |
 | **2** | `docker compose --env-file .env.production -f docker-compose.yml -f docker-compose.prod.yml up` |
@@ -164,59 +164,59 @@ Just double-click `ComposeFile.bat` and pick a number:
 | **4** | `docker compose down` |
 | **5** | `docker ps` |
 
-### Option B — Manual commands (Mac/Linux/anywhere)
+### אפשרות ב' — פקודות ידניות (Mac/Linux/בכל מקום)
 
-**Start developing:**
+**התחלת פיתוח:**
 ```bash
 docker compose up
 ```
-**Stop:**
+**עצירה:**
 ```bash
 docker compose down
 ```
 
-**Go to production:**
+**מעבר לפרודקשן:**
 ```bash
 docker compose --env-file .env.production -f docker-compose.yml -f docker-compose.prod.yml up
 ```
-**Stop production:**
+**עצירת פרודקשן:**
 ```bash
 docker compose --env-file .env.production -f docker-compose.yml -f docker-compose.prod.yml down
 ```
 
-**Peek at what's running:**
+**בדיקה מה רץ כרגע:**
 ```bash
 docker ps
 ```
 
 ---
 
-## 🌐 Accessing the App
+## 🌐 גישה לאפליקציה
 
-| Environment | URL |
+| סביבה | כתובת |
 |---|---|
-| Development | [http://localhost:3000](http://localhost:3000) |
-| Dev health check | [http://localhost:3000/health](http://localhost:3000/health) |
-| Production | `https://<your-host>` (host port `443` → container port `3000`) |
-| MongoDB (dev only) | `localhost:27017` |
+| פיתוח | [http://localhost:3000](http://localhost:3000) |
+| בדיקת תקינות בפיתוח | [http://localhost:3000/health](http://localhost:3000/health) |
+| פרודקשן | [http://localhost](http://localhost) (פורט `80`, דרך Nginx ← מועבר לאפליקציה על פורט `3000`) |
+| MongoDB | לא מקומי — מתארח ב-MongoDB Atlas, נגיש רק דרך `MONGO_URL` |
 
-In production, MongoDB isn't exposed to the outside world at all — only the `app` container can reach it, over Docker's internal network.
-
----
-
-## 🧪 Testing the API
-
-- Open `requests.http` in an HTTP client (like the VS Code REST Client extension) and fire off pre-built requests.
-- Or just visit [http://localhost:3000](http://localhost:3000) and use the front end.
+בפרודקשן, רק **Nginx** חשוף לעולם החיצון; קונטיינר ה-`app` נגיש רק דרכו, מעל הרשת הפנימית של Docker.
 
 ---
 
-## 💡 Good to Know
+## 🧪 בדיקת ה-API
 
-- Docker Desktop needs to be running before you use any command above.
-- In dev, code changes hot-reload automatically — no rebuild needed for everyday edits.
-- No `JWT_SECRET`? The app exits immediately. Set it first.
-- The `app` container waits for MongoDB to be healthy before starting — no race conditions.
-- MongoDB data lives in a Docker volume (`mongodata`) and survives `docker compose down`. Want a clean slate? Use `docker compose down -v`.
-- Changed a `.env` file? Restart the containers to pick it up.
-- You never need to run `npm install` locally — dependencies are installed inside the image automatically.
+- פתחו את `requests.http` בכלי HTTP (כמו תוסף VS Code REST Client) והריצו בקשות מוכנות מראש.
+- או פשוט בקרו ב-[http://localhost:3000](http://localhost:3000) (פיתוח) / [http://localhost](http://localhost) (פרודקשן) והשתמשו בפרונט-אנד.
+
+---
+
+## 💡 דברים שכדאי לדעת
+
+- Docker Desktop צריך לרוץ לפני שמשתמשים באחת מהפקודות למעלה.
+- בפיתוח, שינויי קוד נטענים מחדש (hot reload) אוטומטית — אין צורך בבנייה מחדש בשינויים שוטפים.
+- אין `JWT_SECRET`? האפליקציה תיסגר מיד. הגדירו אותו קודם.
+- אין יותר קונטיינר מסד נתונים מקומי לחכות לו — האפליקציה מתחברת ישירות ל-MongoDB Atlas דרך `MONGO_URL`, אז ודאו שמחרוזת החיבור נכונה לפני ההרצה.
+- בפרודקשן, ל-Nginx לא יהיה למה להעביר תעבורה עד שקונטיינר ה-`app` עולה — בדקו `docker compose logs app` אם `http://localhost` לא מגיב.
+- שיניתם קובץ `.env`? הפעילו מחדש את הקונטיינרים כדי שהשינוי ייכנס לתוקף.
+- אף פעם לא צריך להריץ `npm install` באופן מקומי — התלויות מותקנות אוטומטית בתוך האימג'.

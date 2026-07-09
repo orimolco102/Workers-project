@@ -1,0 +1,9 @@
+https://medium.com/@thapavishal117/secure-your-docker-containers-run-applications-as-a-non-root-user-0f1cfc36dca6
+https://www.docker.com/blog/understanding-the-docker-user-instruction/
+https://www.youtube.com/watch?v=jGePPQFArwo
+https://docs.docker.com/ai/docker-agent/features/evaluation/
+https://docs.docker.com/compose/how-tos/startup-order/
+https://www.cloudflare.com/learning/ssl/transport-layer-security-tls/
+https://redis.io/tutorials/operate/docker/nodejs-nginx-redis/
+https://www.youtube.com/watch?v=GYK5iZwIKCA
+https://docs.docker.com/desktop/features/networking/
