@@ -5,7 +5,7 @@ async function loadworkers() {
   try {
     const response = await fetch(API);
     const workers = await response.json();
-    console.log(workers);
+    // console.log(workers);
     renderWorkers(workers);
   } catch (error) {
     console.error(error);
