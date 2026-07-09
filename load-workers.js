@@ -66,7 +66,6 @@ const workers = [
 
 async function loadeWorkers() {
   try {
-    console.log(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/${process.env.DB_NAME}`);
     await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/${process.env.DB_NAME}`);
     
     await Worker.deleteMany({});
